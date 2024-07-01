@@ -1,0 +1,350 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>【仿真】基于Anylogic的Java代码入门教程 | ？0的网络笔记</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/8.0.1/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/pure-min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/1.0.1/grids-responsive-min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/3.4.1/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = 'https://hm.baidu.com/hm.js?' + 'd80a6841688947ba89dd953fc3baed70';
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/2.1.4/toastr.min.css"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">【仿真】基于Anylogic的Java代码入门教程</h1><a id="logo" href="/.">？0的网络笔记</a><p class="description">whl1207.github.io</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">【仿真】基于Anylogic的Java代码入门教程</h1><div class="post-meta">2020-04-23<span> | </span><span class="category"><a href="/categories/%E4%BB%BF%E7%9C%9F/">仿真</a></span></div><a class="disqus-comment-count" href="/2020/04/23/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E5%9F%BA%E4%BA%8EAnylogic%E7%9A%84Java%E4%BB%A3%E7%A0%81%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/#vcomment"><span class="valine-comment-count" data-xid="/2020/04/23/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E5%9F%BA%E4%BA%8EAnylogic%E7%9A%84Java%E4%BB%A3%E7%A0%81%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/"></span><span> 条评论</span></a><div class="post-content"><p>由于Anylogic所使用的代码为java代码，因此对java没有任何基础的同学可能会在学习时有些吃力。所以本文的目的在于教会大家如何在Anylogic中使用java代码来编写程序。</p>
+<p>在正式开始学习之前先给大家介绍一个函数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.print();</span><br></pre></td></tr></table></figure>
+<p>这个函数用于在控制台输出消息，那么该函数应该在哪里输入呢？</p>
+<ul>
+<li>1、打开Anylogic软件。</li>
+<li>2、在任意位置新建一个模型。</li>
+<li>3、建好后，单击Main智能体的空白位置。</li>
+<li>4、在右侧Main的属性面板中找到智能体行动的启动时的输入栏。</li>
+<li>5、在其中输入System.out.print(1);。</li>
+<li>6、启动模型并运行。</li>
+<li>7、观察到控制台中输出了1，说明代码输入成功。</li>
+</ul>
+<p>该函数将在学习的过程中经常使用到，并且该函数也经常用于在开发中寻找错误。下面我们将主要使用该函数对基于Anylogic的java入门予以介绍。</p>
+<h2 id="一、变量"><a href="#一、变量" class="headerlink" title="一、变量"></a>一、变量</h2><h3 id="（一）基本的变量类型"><a href="#（一）基本的变量类型" class="headerlink" title="（一）基本的变量类型"></a>（一）基本的变量类型</h3><p>在java中变量有很多种类型，也可以自己进行创建。但基础的数据类型就这样几个：</p>
+<h4 id="数值型："><a href="#数值型：" class="headerlink" title="数值型："></a>数值型：</h4><p>整型（整数）：</p>
+<ul>
+<li>byte：范围为(-2^7,2^7-1)</li>
+<li>short：范围为(-2^15,2^15-1)</li>
+<li>int:范围为(-2^31,2^31-1)</li>
+<li>long：范围为(-2^63,2^63-1)<br>浮点型（小数）：</li>
+<li>float：有效位数15位</li>
+<li>double：有效位数15位</li>
+</ul>
+<h4 id="字符型："><a href="#字符型：" class="headerlink" title="字符型："></a>字符型：</h4><ul>
+<li>char：Unicide字符集，只能储存单个字符。</li>
+<li>String：存储一串字符。</li>
+</ul>
+<h4 id="布尔型："><a href="#布尔型：" class="headerlink" title="布尔型："></a>布尔型：</h4><ul>
+<li>boolean：true/false</li>
+</ul>
+<p>在Anylogic常用的基本变量类型主要是：</p>
+<ul>
+<li>boolean</li>
+<li>int</li>
+<li>double</li>
+<li>String</li>
+</ul>
+<h3 id="（二）Anylogic中常用的其他变量类型"><a href="#（二）Anylogic中常用的其他变量类型" class="headerlink" title="（二）Anylogic中常用的其他变量类型"></a>（二）Anylogic中常用的其他变量类型</h3><p>除了java常用的一些变量类型，Anylogic还会经常使用到一些其他的变量类型，如：</p>
+<ul>
+<li>double []：由小数构成的数组</li>
+<li>double [][]：由小数构成的二维数组</li>
+<li>Agent：通用的智能体类型</li>
+<li>自建的智能体类型</li>
+<li>object</li>
+</ul>
+<h3 id="（三）变量的声明和使用"><a href="#（三）变量的声明和使用" class="headerlink" title="（三）变量的声明和使用"></a>（三）变量的声明和使用</h3><h4 id="1、声明变量"><a href="#1、声明变量" class="headerlink" title="1、声明变量"></a>1、声明变量</h4><p>基础的声明变量可以在代码中直接声明。</p>
+<p>语法：数据类型 变量名</p>
+<p>如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">double score;     //声明双精度浮点型变量score存储分数</span><br><span class="line">String name;      //声明字符串型变量name存储姓名</span><br><span class="line">char sex;           //声明字符型变量sex存储性别</span><br></pre></td></tr></table></figure>
+<p>在Anylogic中还有另一种声明变量的方式，就是在面板中拖入“参数”或“变量”并指定数据类型来声明该变量，这种方式声明的变量在该智能体的任何位置均可直接使用。</p>
+<h4 id="2、变量赋值"><a href="#2、变量赋值" class="headerlink" title="2、变量赋值"></a>2、变量赋值</h4><p>变量赋值即将数据存储至对应的内存空间中。</p>
+<p>语法：   变量名 = 值</p>
+<p>如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">score = 98.5;     //存储98.5</span><br><span class="line">name = <span class="string">"张三"</span>;    //存储“张三”</span><br><span class="line">sex = <span class="string">'男'</span>;       //存储‘男’</span><br></pre></td></tr></table></figure>
+
+<p>注意在赋值前需要先声明变量。另外在代码中我们注意到所有String类型的变量赋值需要在值的两侧输入”才不会报错。当然也有一种更简单的方法如下：</p>
+<h4 id="3、即声明变量又赋值"><a href="#3、即声明变量又赋值" class="headerlink" title="3、即声明变量又赋值"></a>3、即声明变量又赋值</h4><p>语法：   数据类型  变量名 = 值</p>
+<p>如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">double score = 98.5;</span><br><span class="line">String name= <span class="string">"张三"</span>;</span><br><span class="line">char sex = <span class="string">'男'</span>;</span><br></pre></td></tr></table></figure>
+<p>注意这里的代码后都跟了一个’;’，代表一句话的结束，也是java的语法规则。</p>
+<h3 id="（四）调用变量"><a href="#（四）调用变量" class="headerlink" title="（四）调用变量"></a>（四）调用变量</h3><p>使用System.out.print()函数来调用变量，当然在实际使用过程中其他函数也都是可以直接调用变量的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(score);       //从控制台输出变量score存储的值</span><br><span class="line">System.out.println(name);      //从控制台输出变量name存储的值</span><br><span class="line">System.out.println(sex);         //从控制台输出变量sex存储的值</span><br></pre></td></tr></table></figure>
+
+<p>现在我们完整的操作一边，在启动时中输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String name; </span><br><span class="line">name = <span class="string">"张三"</span>;</span><br><span class="line">System.out.println(name);</span><br></pre></td></tr></table></figure>
+<p>这样我们就能够看到前面声明的变量在控制台输出“张三”二字了。</p>
+<h3 id="（四）变量的命名规范"><a href="#（四）变量的命名规范" class="headerlink" title="（四）变量的命名规范"></a>（四）变量的命名规范</h3><ul>
+<li>在Anylogic中一般使用英文单词或字母来命名变量。</li>
+<li>多个英文单词组成的变量可在每个单词的首字母大写，中间不留空格</li>
+<li>在Anylogic中还有特殊的命名方法，可以使用中文命名变量和类型，在不报错的前提下可以使用，方便辨识。</li>
+</ul>
+<h2 id="二、数组的使用"><a href="#二、数组的使用" class="headerlink" title="二、数组的使用"></a>二、数组的使用</h2><h3 id="（一）定义数组"><a href="#（一）定义数组" class="headerlink" title="（一）定义数组"></a>（一）定义数组</h3><p>直接定义数组中元素的个数，代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int data[] = new int[3]; /*开辟了一个长度为3的数组*/</span><br></pre></td></tr></table></figure>
+<p>但有时需要根据实际情况定义数组中元素的个数。可分步开辟空间，代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int data[] = null; </span><br><span class="line">data = new int[3]; /*开辟了一个长度为3的数组*/</span><br></pre></td></tr></table></figure>
+<h3 id="（二）定义数组中元素的值"><a href="#（二）定义数组中元素的值" class="headerlink" title="（二）定义数组中元素的值"></a>（二）定义数组中元素的值</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data[0] = 10; // 第一个元素</span><br><span class="line">data[1] = 20; // 第二个元素</span><br><span class="line">data[2] = 30; // 第三个元素</span><br></pre></td></tr></table></figure>
+<p>当然也可以采用循环语句来定义值。</p>
+<h3 id="（三）静态数组的初始化"><a href="#（三）静态数组的初始化" class="headerlink" title="（三）静态数组的初始化"></a>（三）静态数组的初始化</h3><p>有时我们一开始就知道数组中元素的值，我们可以使用如下的代码来定义数组：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int data[] = &#123;1, 2, 4, 545, 11, 32, 13131, 4444&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="（四）二维数组的初始化"><a href="#（四）二维数组的初始化" class="headerlink" title="（四）二维数组的初始化"></a>（四）二维数组的初始化</h3><p>定义二维数组我们可以采用如下的语法来定义，具体代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int[][] arr = new int[3][2]; /*动态初始化*/</span><br><span class="line">int data[][] = new int[][] &#123;&#123;1, 2, 3&#125;, &#123;4, 5&#125;, &#123;6, 7, 8, 9&#125;&#125;; /*可以定义不是等列数组的数组*/</span><br></pre></td></tr></table></figure>
+<p>二维数组的调用可以使用如下语法来调用：</p>
+<ul>
+<li>语法： 数组名称[所在行][所在列]</li>
+</ul>
+<h2 id="三、基础函数"><a href="#三、基础函数" class="headerlink" title="三、基础函数"></a>三、基础函数</h2><h3 id="（一）常用的数学函数"><a href="#（一）常用的数学函数" class="headerlink" title="（一）常用的数学函数"></a>（一）常用的数学函数</h3><h4 id="1、数学计算"><a href="#1、数学计算" class="headerlink" title="1、数学计算"></a>1、数学计算</h4><ul>
+<li>Math.E：产生自然常数e=2.7182818284590452354。</li>
+<li>Math.exp(x)：计算e的x次方。</li>
+<li>Math.pow(a,b)：计算a的b次方。</li>
+<li>Math.sqrt(a)：计算a的开方。</li>
+<li>Math.abs(a)：计算a的绝对值。</li>
+<li>Math.log(e)：计算以e为底的对数  </li>
+<li>Math.log10(100)：计算以10为底的对数  </li>
+<li>Math.max(x, y)：返回x、y中较大的那个数  </li>
+<li>Math.min(x, y)：返回x、y中较小的那个数  </li>
+<li>Math.ceil(12.3)：返回最近的且大于该值的整数13.0  </li>
+<li>Math.ceil(-12.3)：返回-12.0  </li>
+<li>Math.floor(12.3)：返回最近的且小于该值的整数12.0  </li>
+<li>Math.floor(-12.3)：返回-13.0 </li>
+<li>Math.hypot(x, y)：返回√（x²+y²） <h4 id="2、产生随机值"><a href="#2、产生随机值" class="headerlink" title="2、产生随机值"></a>2、产生随机值</h4>产生随机数的函数有如下一些：</li>
+<li>Math.random()：产生0-1之间的double类型的小数。</li>
+<li>(int)(Math.random()*10)：产生0-9之间的整数。</li>
+</ul>
+<h3 id="（二）常用的数组函数"><a href="#（二）常用的数组函数" class="headerlink" title="（二）常用的数组函数"></a>（二）常用的数组函数</h3><h4 id="1、数组长度"><a href="#1、数组长度" class="headerlink" title="1、数组长度"></a>1、数组长度</h4><ul>
+<li><p>一维数组的长度</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arg.length;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二维数组的长度</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String[][] data = new String[2][5];</span><br><span class="line">System.out.println(<span class="string">"第一维数组长度: "</span> + data.length);</span><br><span class="line">System.out.println(<span class="string">"第二维数组长度: "</span> + data[0].length);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="2、数组排序"><a href="#2、数组排序" class="headerlink" title="2、数组排序"></a>2、数组排序</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.sort(array);</span><br></pre></td></tr></table></figure>
+<h4 id="3、数组反转"><a href="#3、数组反转" class="headerlink" title="3、数组反转"></a>3、数组反转</h4><p>使用 Collections.reverse(ArrayList) 可以将数组进行反转。</p>
+<h4 id="4、数组填充"><a href="#4、数组填充" class="headerlink" title="4、数组填充"></a>4、数组填充</h4><p>通过 Java Util 类的 Array.fill(arrayname,value) 方法和 Array.fill(arrayname ,starting index ,ending index ,value) 方法向数组中填充元素。</p>
+<h4 id="5、删除数组元素"><a href="#5、删除数组元素" class="headerlink" title="5、删除数组元素"></a>5、删除数组元素</h4><p>使用ArrayList.remove()方法删除数组元素。<br>对应的ArrayList.remove()也有两种。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">objArray.remove(1);/*移除序号*/</span><br><span class="line">objArray.remove(<span class="string">"第 0 个元素"</span>);/*移除值*/</span><br></pre></td></tr></table></figure>
+<h4 id="6、判断数组是否相等"><a href="#6、判断数组是否相等" class="headerlink" title="6、判断数组是否相等"></a>6、判断数组是否相等</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays.equals(ary, ary1);</span><br></pre></td></tr></table></figure>
+<h3 id="（三）建立自己的函数"><a href="#（三）建立自己的函数" class="headerlink" title="（三）建立自己的函数"></a>（三）建立自己的函数</h3><p>Anylogic中可以直接在代码里写自己的函数，具体格式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/*无返回值的函数*/</span><br><span class="line">void <span class="function"><span class="title">add</span></span>()&#123;</span><br><span class="line"></span><br><span class="line">&#125; </span><br><span class="line">/*有返回值的函数*/</span><br><span class="line">double getDifference(int a, int b)&#123;</span><br><span class="line">    double result = a - b;</span><br><span class="line">    <span class="built_in">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意在有返回值的函数中需要定义返回值的数据类型。</p>
+<p>当然Anylogic还提供了几种可视化的函数编写元素。</p>
+<h4 id="1、函数元素"><a href="#1、函数元素" class="headerlink" title="1、函数元素"></a>1、函数元素</h4><ul>
+<li>直接将智能体面板的函数元素拖到主界面。</li>
+<li>命名该函数。</li>
+<li>选择参数的输入。</li>
+<li>定义返回值的类型。</li>
+<li>在函数体中输入代码。</li>
+</ul>
+<p>通过这几部就能完成一个函数的编写，然后即可在该智能体中进行引用。</p>
+<h4 id="2、行动图元素"><a href="#2、行动图元素" class="headerlink" title="2、行动图元素"></a>2、行动图元素</h4><p>可打开行动图面板，通过其中的代码块拼凑出函数，有点是可视化程度高，缺点是编辑起来较为繁琐。</p>
+<h2 id="四、判断及循环语句"><a href="#四、判断及循环语句" class="headerlink" title="四、判断及循环语句"></a>四、判断及循环语句</h2><h3 id="（一）判断语句"><a href="#（一）判断语句" class="headerlink" title="（一）判断语句"></a>（一）判断语句</h3><h4 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(关系表达式1) &#123;</span><br><span class="line">语句体1;</span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> (关系表达式2) &#123;</span><br><span class="line">语句体2;</span><br><span class="line">&#125;…</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">语句体n+1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">switch(表达式) &#123;</span><br><span class="line"><span class="keyword">case</span> 值1：</span><br><span class="line">　　语句体1;</span><br><span class="line">　　<span class="built_in">break</span>;</span><br><span class="line"><span class="keyword">case</span> 值2：</span><br><span class="line">　　语句体2;</span><br><span class="line">　　<span class="built_in">break</span>;</span><br><span class="line">…</span><br><span class="line">default：</span><br><span class="line">　　语句体n+1;</span><br><span class="line">　　<span class="built_in">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="（二）循环语句"><a href="#（二）循环语句" class="headerlink" title="（二）循环语句"></a>（二）循环语句</h3><h4 id="do…while循环语句"><a href="#do…while循环语句" class="headerlink" title="do…while循环语句"></a>do…while循环语句</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">循环体语句;</span><br><span class="line">&#125;<span class="keyword">while</span>((判断条件语句);</span><br></pre></td></tr></table></figure>
+
+<h4 id="for循环语句"><a href="#for循环语句" class="headerlink" title="for循环语句"></a>for循环语句</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(初始化语句;判断条件语句;控制条件语句) &#123;</span><br><span class="line">循环体语句;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h4><ul>
+<li>break：退出当前循环</li>
+<li>continue：退出本次循环</li>
+</ul>
+<h2 id="五、智能体"><a href="#五、智能体" class="headerlink" title="五、智能体"></a>五、智能体</h2><p>在Anylogic最常用的就是智能体的概念，下面讲解以下智能体的相关知识。</p>
+<h3 id="（一）多层智能体之间的调用"><a href="#（一）多层智能体之间的调用" class="headerlink" title="（一）多层智能体之间的调用"></a>（一）多层智能体之间的调用</h3><p>如果在Main中建立了新的智能体，现在要在Main中调用智能体a中的val变量，可以按以下格式进行调用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a.val</span><br></pre></td></tr></table></figure>
+<p>如果需要在a中调用Main中的val1变量，可以按以下格式进行调用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get_Main().a.val1</span><br></pre></td></tr></table></figure>
+
+<h3 id="（二）智能体"><a href="#（二）智能体" class="headerlink" title="（二）智能体"></a>（二）智能体</h3><h4 id="1、创建一个智能体"><a href="#1、创建一个智能体" class="headerlink" title="1、创建一个智能体"></a>1、创建一个智能体</h4><ul>
+<li>在工程面板创建一个智能体类型。</li>
+<li>命名这个智能体类型。</li>
+<li>选择该智能体的动画，为示例函数的运行，可选一个人作为动画。</li>
+<li>创建完成后，将创建好的智能体类型拖到Main中即可完成智能体的创建。</li>
+</ul>
+<h4 id="2、智能体的移动函数"><a href="#2、智能体的移动函数" class="headerlink" title="2、智能体的移动函数"></a>2、智能体的移动函数</h4><ul>
+<li>setXY(double x,double y)：设置智能体位置。</li>
+<li>getX()、getY()、getZ()：返回智能体在连续空间中的X、Y、Z坐标。</li>
+<li>Position getPosition()：以Position类型的形式返回连续空间中智能体最新的X、Y、Z坐标。</li>
+<li>void moveTo(double x,double y)：向x、y位置移动</li>
+<li>void moveTo(double x,double y,double z)：向x、y、z位置移动</li>
+<li>void moveTo(Agent agent)：向agent这个智能体位置移动</li>
+<li>boolean isMoving()：判断智能体是否在移动。</li>
+<li>double timeToArrival()：返回智能体到达目标位置的时间。</li>
+<li>void stop()：停止智能体的移动。</li>
+<li>void moveToInTime(Point location, double tripTime)：在给定目标位置的方向移动。更改智能体的速度，使在tripTime的时间内到达目标。</li>
+<li>void moveToNearestAgent (java.lang.Iterable&lt;? extends Agent&gt; agents, double tripTime)：移动到给定的智能体群中最近的智能体。停止任何当前的移动。更改智能体的速度，使在tripTime的时间内到达目标。</li>
+<li>void moveToInTime(double x, double y, double tripTime)：在连续的三维或GIS空间的给定目标位置的方向移动。更改智能体的速度，使在tripTime的时间内到达目标。</li>
+<li>void moveToInTime(double x, double y, double z, double tripTime)：在连续3D的目标位置开始移动。改变智能体速度，使在tripTime的时间内到达目标。</li>
+<li>void moveToInTime(Node node, Point location, double tripTime)：开始向给定的网络节点移动。更改智能体的速度，使在tripTime的时间内到达目标。</li>
+<li>void moveToInTime(Attractor attractor, double tripTime)：开始移动到给定吸引子。更改智能体的速度，使在tripTime的时间内到达目标。</li>
+<li>void jumpTo(double x, double y)：在连续的3D空间中，立即将智能体移动到给定位置。终止任何移动。不调用“到达时”的代码。</li>
+<li>void jumpTo(double x, double y, double z)：立即将智能体移动到给定位置。终止任何移动。不调用“到达时”代码。</li>
+<li>void jumpTo(Node node, Point location)：立即将智能体移动到给定的网络位置。终止任何移动。不调用“到达时”的代码。</li>
+<li>void jumpTo(Point location)：立即将智能体移动到给定的位置。终止任何移动。不调用“到达时”代码。</li>
+<li>double getTargetX()：智能体在移动时返回目标位置的X坐标，否则返回当前的X坐标。</li>
+<li>double getTargetY()：智能体在移动时返回目标位置的Y坐标，否则返回当前的Y坐标。</li>
+<li>double getTargetZ()：智能体在移动时返回目标位置的Z坐标，否则返回当前的Z坐标。</li>
+<li>double distanceTo(Agent other)：计算这个智能体到另一个智能体的距离。</li>
+<li>double distanceTo(double x, double y)：计算这个智能体到给定点的距离。</li>
+<li>double distanceTo(double x, double y, double z)：在连续空间中计算该智能体到给定点(x,y,z)的距离。</li>
+<li>double distanceTo(Point p)：在连续空间中计算该智能体到给定点(x,y,z)的距离。</li>
+<li>double getSpeed()：在连续空间中返回智能体速度的当前值（以模型时间单位行走的像素数来计算）。注意非零速度并不意味着智能体正在移动，智能体只在调用moveTo()函数后才开始移动。</li>
+<li>void setSpeed(double v)：在连续空间中更改智能体的速度（以像素为单位）。如果智能体正在移动，它将继续以新的速度移动。注意非零的速度并不意味着智能体正在移动，智能体只在调用moveTo()函数后才开始移动。</li>
+<li>double getRotation()：在连续三维空间中返回智能体的旋转角度（弧度制）如果旋转不被冻结，每次旋转时，旋转就会改变，在GIS空间的移动中也会发生多次变化。</li>
+<li>void setRotation(double rotation)：在连续三维空间中设置智能体动画的旋转角度（弧度制）。根据自动旋转设置，在下一个调用moveTo()函数或在当前移动中（如果存在的话），这种旋转值可能会被重写。</li>
+<li>void setAutomaticHorizontalRotation (boolean yes)：设置智能体在移动过程中的自动旋转。</li>
+<li>boolean isAutomaticHorizontalRotation()：智能体在移动过程中被旋转返回true，否则false。</li>
+<li>void setVerticalRotation(double rotation)：设置垂直旋转（弧度制），沿三维空间中智能体动画的Z轴。根据自动垂直旋转设置，在下一个调用moveTo()函数或在当前移动（如果存在的话）沿着路径/折线中，这个旋转值可能会被重写。</li>
+<li>double getVerticalRotation()：在三维空间中返回智能体的当前垂直旋转角度。如果设置自动垂直旋转模式，则每次旋转时角度改变，并在移动中多次改变。</li>
+<li>void setAutomaticVerticalRotation(boolean yes)：设置智能体是否自动垂直旋转。</li>
+<li>boolean isAutomaticVerticalRotation()：智能体在三维的移动中被旋转（在垂直方向上，沿着Z轴）返回true，否则返回false。</li>
+</ul>
+<h4 id="3、智能体的交互函数"><a href="#3、智能体的交互函数" class="headerlink" title="3、智能体的交互函数"></a>3、智能体的交互函数</h4><p>第一种函数：发送消息send()/<em>推荐</em>/</p>
+<ul>
+<li>void sendToAll(Object msg)：将消息发送到智能体所在的同一环境中的所有智能体。</li>
+<li>void sendToRandom(Object msg)：向同环境中的一个随机智能体发送消息。<br>void sendToAllConnected (Object msg)：向所有连接的智能体发送消息。</li>
+<li>void sendToRandomConnected (Object msg)：向随机选择的一个已连接的智能体发送消息。</li>
+<li>void sendToAllNeighbors (Object msg)：向所有邻居发送信息，只有当智能体处于离散空间中时才可用。</li>
+<li>void sendToRandomNeighbor (Object msg)：向随机选择的邻居发送消息，只有当智能体处于离散空间环境中时才可用。</li>
+<li>void send(Object msg, Agent dest)：向给定的智能体发送消息。<br>参数：msg——信息；dest——目标智能体</li>
+<li>void send(Object msg, MessageDeliveryType mode)：将消息发送给智能体或智能体群，以给定的mode参数。</li>
+</ul>
+<p>第二种函数：及时消息传递：deliver()</p>
+<ul>
+<li>void deliverToAllAgentsInside (Object msg)：立即向环境中的所有智能体传输信息。</li>
+<li>void deliverToRandomAgentInside (Object msg)：如果存在任何一个智能体，立即向环境中的随机智能体传递消息。</li>
+<li>void deliverToAllConnected(Object msg)：向所有已连接的智能体传递消息。</li>
+<li>void deliverToRandomConnected (Object msg)：向随机选择的已连接的智能体传递消息。</li>
+<li>void deliverToAllNeighbors(Object msg)：向所有邻居传递信息。</li>
+<li>void deliverToRandomNeighbor (Object msg)：向随机选择的邻居传递信息。</li>
+<li>void deliver(Object msg, Agent dest)：立即向给定的智能体传递消息。</li>
+<li>void deliver(Object msg, MessageDeliveryType mode)：用指定模式将消息传递给智能体（群）。</li>
+</ul>
+<h4 id="4、函数的输入格式"><a href="#4、函数的输入格式" class="headerlink" title="4、函数的输入格式"></a>4、函数的输入格式</h4><p>当然智能体的函数还有很多，具体可参照其官方手册。</p>
+<p>在智能体内部只需按以下格式输入函数即可完成行为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">this.函数名(参数,参数);</span><br></pre></td></tr></table></figure>
+<p>在Main中需按以下格式进行输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">智能体名称.函数名(参数,参数);</span><br></pre></td></tr></table></figure>
+<h3 id="（三）智能体群"><a href="#（三）智能体群" class="headerlink" title="（三）智能体群"></a>（三）智能体群</h3><h4 id="1、统计数据"><a href="#1、统计数据" class="headerlink" title="1、统计数据"></a>1、统计数据</h4><p>Anylogic能够方便的收集统计智能体群的数据，包含计数、求和、求平均值、求最小值和最大值这几个常见的统计类型。</p>
+<ul>
+<li>Count：确定符合指定条件的智能体。</li>
+<li>Sum：迭代所有智能体并评估每个智能体的指定表达式，返回和。</li>
+<li>Average：迭代所有智能体并评估每个智能体的指定表达式，返回平均值。</li>
+<li>Min：迭代所有智能体并评估每个智能体的指定表达式，返回最小值。</li>
+<li>Max：迭代所有智能体并评估每个智能体的指定表达式，返回最大值。</li>
+</ul>
+<p><strong>为智能体群定义新的统计函数的步骤</strong></p>
+<ul>
+<li>在图形编辑器或工程视图中选择群。</li>
+<li>打开属性视图的统计部分。</li>
+<li>单击添加统计按钮，创建一个定义统计的新项目。</li>
+<li>在“名称”输入统计函数的名称，用于识别和访问这个统计函数。</li>
+<li>在“类型”中选择统计函数的类型。</li>
+<li>在“表达式”/“条件“中指定统计条件和函数。当在这些字段中编写代码时，可以使用item作为局部变量访问单个元素（智能体）。</li>
+<li>要添加更多的统计项目，请重复3-6的步骤。如果不再需要一些统计数据，可以点击按钮来删除相应的项目。</li>
+</ul>
+<p>如需使用函数访问统计，可以使用统计名称+括号的方式输入。即在上面的示例中，如果要计算统计数据，可用peopleStat()函数来获得值。</p>
+<p><strong>如何收集智能体群的统计数据</strong></p>
+<p>Anylogic提供了收集智能体群中的智能体的统计数据。这些函数在UtilitiesCollection类中定义，并且是全局的（即从任何地方都可以访问）。可以从列表中调用任何函数，只输入它的名字而不需要前缀，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count( people, p -&gt; p.income &gt; 10000 );</span><br></pre></td></tr></table></figure>
+
+<p><strong>计算满足条件的智能体个数</strong></p>
+<ul>
+<li>int count( population, condition )：计算智能体满足指定条件的个数。<br>例子：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count(people,p-&gt;p.income&gt;10000);</span><br></pre></td></tr></table></figure>
+在这个例子中将计算income（收入）超过10000的人数。作为第一个函数参数要指定要遍历的群名。第二个参数指定为每个智能体检查的条件。这种情况下，首先要定义局部变量（它以p命名，但它可以以任何其他名称命名）。可以在指定条件下使用这个局部变量来引用目前正在检查的智能体。然后输入箭头运算符-&gt;（它由两个符号组成），并定义了它们的条件p.income&gt;10000。count()函数遍历了所有people群中的智能体，并检查每个智能体的收入。如果智能体的收入大于10000（定义条件为true）就计算这个特定的智能体。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count(people,p-&gt;p.sex==MALE&amp;&amp;p.age&gt;=18);</span><br></pre></td></tr></table></figure>
+
+<p>这里检查两个条件（使用逻辑和操作符&amp;&amp;告诉Anyogic第一个和第二个条件都应为真），只计算满足两个条件的智能体。</p>
+<p>为了获得目前位于people的智能体的个数，可以使用：people.size();<br>在群中获得平均值（智能体的属性等）</p>
+<ul>
+<li><p>double average( population, value )：返回给定智能体群的平均值。例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">average( people, p -&gt; p.income );</span><br></pre></td></tr></table></figure>
+<p>这里计算people群中智能体的平均收入。</p>
+</li>
+<li><p>double averageWhere(population,value,condition)：在给定条件下返回特定人群的平均值。例：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">average(people,p-&gt;p.income,p-&gt;p.age&gt;18);</span><br></pre></td></tr></table></figure>
+
+<p>这里计算了这些人的平均收入，他们年龄需要超过18。函数第一个参数指定了群，第二个参数定义了需要计算的值，第三个参数是条件。这里只对满足这个条件的智能体计算平均值。注意在指定条件之前，需再次定义局部变量p。</p>
+<p><strong>在智能体群中获得最小（最大值）值</strong></p>
+<ul>
+<li>double max(population,value )：返回给定群最大值。</li>
+<li>double maxWhere(population,value,condition)：返回给定条件下的智能体中最大值。</li>
+<li>double min(population,value )：返回给定群最小值。</li>
+<li>double minWhere(population,value,condition)：返回给定条件下的智能体中最小值。例：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxWhere(people,p-&gt;p)；</span><br></pre></td></tr></table></figure>
+
+<p>这里计算了所有人的最大收入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxWhere(people,p-&gt;p.income,p-&gt;p.sex==FEMALE);</span><br></pre></td></tr></table></figure>
+<p>这里计算了智能体群中的所有女性的最大收入。</p>
+<p><strong>计算智能体值的总和</strong></p>
+<ul>
+<li>double sum( population, value )：返回在给定群中值的总和。例：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum( people, p -&gt; p.income );</span><br></pre></td></tr></table></figure>
+
+<p>这里计算了智能体群中的所有人的总收入。</p>
+<ul>
+<li>double sumWhere( population, value, condition )：返回给定条件、给定群值的总和。例：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sumWhere( people, p -&gt; p.income, p -&gt; p.age &gt; 18 );</span><br></pre></td></tr></table></figure>
+
+<p>这里计算了年龄超过18岁的成人的总收入。</p>
+<h4 id="随机选择智能体群中的智能体"><a href="#随机选择智能体群中的智能体" class="headerlink" title="随机选择智能体群中的智能体"></a>随机选择智能体群中的智能体</h4><p>AnyLogic提供了从给定群中选择随机智能体的函数。这些函数在Utilities类中定义，并且是全局的（可从模型代码的每个位置访问）。可以通过输入其名称来调用下面列表中的任何函数，而不使用带有people名称的前缀：randomWhere(people,p-&gt;p.income&gt;10000);</p>
+<ul>
+<li>Agent randomWhere(population,condition)：返回满足指定条件的给定群中随机选择的一个智能体。如果群为空或者没有智能体满足指定的条件应返回null。例子：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Person wealthyPerson=randomWhere(people,p-&gt;p.income&gt;10000);</span><br><span class="line">Person wealthyMan=randomWhere(people,p-&gt;p.income&gt;10000&amp;&amp;p.sex==MALE);</span><br></pre></td></tr></table></figure>
+
+<p>这里检查两个条件（使用逻辑和运算符&amp;&amp;告诉AnyLogic第一个和第二个条件都应为真）。该函数返回一个随机选择的智能体，满足这两个条件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person wealthyYoungMan=randomWhere( people , p-&gt;p.income&gt;10000 &amp;&amp; p.sex == MALE &amp;&amp;p.age&lt;21);</span><br></pre></td></tr></table></figure>
+
+<p>还有另一个函数，使用户能够使用指定的自定义随机数生成器而不是默认值：</p>
+<ul>
+<li>Agent randomWhere(population, condition, java.util.Random r)：与randomWhere(population, condition )类似，使用指定的自定义随机数生成器来选择元素。</li>
+</ul>
+<h4 id="选择处于特定状态的智能体"><a href="#选择处于特定状态的智能体" class="headerlink" title="选择处于特定状态的智能体"></a>选择处于特定状态的智能体</h4><p>要从智能体群中选择一个智能体群的子集，可用使用filter()函数。函数接受原始智能体群作为第一个参数，然后指定过滤条件。</p>
+<p>举个例子：有两种智能体，客户和卡车。要从客户那里呼叫最近的卡车，下一行代码需要从卡车智能体群（main.trucks）中获得最近的卡车，可以输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Truck truck = getNearestAgent( filter( main.trucks, t -&gt; t.inState( Truck.Idle ) );</span><br></pre></td></tr></table></figure>
+<p>定义了局部变量t，指定筛选条件：t.inState( Truck.Idle )。卡车状态图有空闲、繁忙两种状态，将从目前处于闲置状态的卡车放入子集，并寻找最近的卡车。</p>
+<p><strong>从智能体群中选择特殊的智能体</strong></p>
+<ul>
+<li><p>Agent top(population, value)：在给定智能体群中返回某字段最大的智能体。例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person person = top( people, p -&gt; p.age );</span><br></pre></td></tr></table></figure>
+<p>这里从这个群中得到了一个年龄最大的人。如果群为空函数将返回null。</p>
+</li>
+<li><p>List filter(population, condition)：返回给定群的子集，获得满足条件智能体的新列表。例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List women = filter( people, p -&gt; p.gender == FEMALE );</span><br><span class="line">List idleTrucks = filter( trucks, t -&gt; t.inState(Idle) );</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>List findAll(population,condition)：这个函数和filter(population,condition)一样。</p>
+</li>
+<li><p>Agent findFirst(population, condition)：从智能体群中返回满足条件的第一个智能体。如果没有元素满足条件或集合为空返回null。<br>例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Person person = findFirst( people, p -&gt; p.age &gt; 20 );</span><br></pre></td></tr></table></figure>
+<h4 id="在智能体群中排序智能体"><a href="#在智能体群中排序智能体" class="headerlink" title="在智能体群中排序智能体"></a>在智能体群中排序智能体</h4></li>
+</ul>
+<p>当需对群做一些操作时，可能需要用一些值来排序。在群中不需要重新排序智能体，您可以使用以下Anylogic函数来获取有序的列表，然后在代码中使用它。</p>
+<ul>
+<li><p><T> java.util.List<T> sortAscending(population, value)：返回一个由给定值升序排列的智能体列表。</T></T></p>
+</li>
+<li><p><T> java.util.List<T> sortDescending(population, value)：返回一个由给定值降序排列的智能体列表。例：</T></T></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List sortedByAgeAsc = sortAscending( people, p -&gt; p.age );</span><br><span class="line">List sortedByIncomeDesc = sortDescending( people, p -&gt; p.income );</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a class="article-share-link" data-url="http://whl1207.github.io/2020/04/23/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E5%9F%BA%E4%BA%8EAnylogic%E7%9A%84Java%E4%BB%A3%E7%A0%81%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" data-id="ckclu43wh000o3go11ei0htt0" data-qrcode="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAAE+CAAAAAAxUyPsAAAFP0lEQVR42u3awU4jQQwEUP7/p3elPa0U6FTZPXDg5YRCmOl5jRS73B8f8evPv9f/P5/feX3/9bfnT7afz9e/uc7whQ8fPnz48AVLfwVKHnW2iPaOs21IEHMTfPjw4cOHb8OXFCvtz225MNuMtmDa3BcfPnz48OH7Tr5NydJGDHmJk1Bu/i3w4cOHDx++n+KbNee3woXn1vCtdR8+fPjw4cMXFyV5QNA27W3D3xYi7bj9kVkHPnz48OHDNyoafsPPl1/48OHDhw9f8PWcfG0n72/Kms0gYVOcRQ748OHDhw/fyGHWDOdR/myY3VYO+8HD8JAcPnz48OHDN+Jri4AN4iyOz8P3W7FItP348OHDhw/fpHIoFtqWI/n25BvWUraxxXAj8eHDhw8fvoAvOXa2ifXbA16zY23JFHs26X5zd3z48OHDhy/myx+1LR3yOGAWN9waG6zCBXz48OHDh2/Et2nOZ01+OwBo32kjjOGz4MOHDx8+fIusu22wZ4Pw/AE2n9yvuZXBhw8fPnz4Epk8ws6PbbWj8aTtb+P1lnI2VMCHDx8+fPg2fMml821oh9ktU36dWWkSxQr48OHDhw/fiG/W0rdBw+a7vh1yb0qZIp7Ahw8fPnz4RnxtY5+PpdvRe3v3zZh/s+WNMT58+PDhw3cak99q2mfh+ywIyNv+dlRwLq3w4cOHDx++lm+z9HqoHBc3M6xNVNFu/5eJCz58+PDhwxfz5QfL8sNh52LoCeKkYNq8/+WsAx8+fPjw4SsT7Pax86D/FugmrJ+N/4sNxocPHz58+GK+zbGzfCw9G4e34X4+eJgNKj5aCHz48OHDh280rt4E8bfG4ZsxfBsr1DL48OHDhw/fmq897NU28LNP5p/fjM/rrcKHDx8+fPgm3/LD+H52/CtZYn7l9sBcW9DUJR0+fPjw4cN3HI23kfrsxk8ULvn25O9Ez4sPHz58+PCt+fLqZlYotEfBcrI8BNmMIj45moYPHz58+PCt+TZhQdv2z3KOTYg/ixs++Qw+fPjw4cO35ksKhba1bgOF/CH3R9hno/SibsKHDx8+fPiCA2rtEvOiob3L5lE34UL+L4UPHz58+PC1fEmjnpcF+1F6cuVZ2dTG8VHcjw8fPnz48JV8SfHxXAQ/K4za9n4WKNRbgg8fPnz48C2+zTfLOt9sNmjP44A88pgd0cOHDx8+fPhmfJtWv11Q28BvAohNKVYc2sOHDx8+fPgu8c0a+Dxwf+6Tmw1Oyq/ofB8+fPjw4cN35NscO2tjhc2B8vbg+AWg8/rx4cOHDx++Ed++cGkfeL8Z7YG2elKR/C0+fPjw4cNX8rUPlj9wTnC+2myTZribQ3L48OHDhw9fyzdrs9tWP2nOk4No+WG1fIX5bz+5Cz58+PDhwxfz3Y0G2qVsaNriaRNG1LkLPnz48OHDd/x+byPsvBxpl7J/pLasaYu2CxMAfPjw4cP3K/nOpUDS2LfD6bz0ySOGHL0dFbxxw4cPHz58+EZ87fGyNtTeh+ztCH9Yu7VFGz58+PDhw7fmK+bqV8uUPO5vQ4o2OCj+dfDhw4cPH76S74lovt2MNnZvG/tbAcS1SQg+fPjw4fv1fLfa77bgeGJ7ko1v1//mOvjw4cOHD9+Ir73xvu1fVVKjgqMFjWICfPjw4cOH72G+TfM/a+PbY23nd2Yb/6UVPnz48OHD9xhfUiIUNx4Nodvr1xHALKzHhw8fPnz4HpjztgXErWg+CevbWuJWdIIPHz58+PCt0+nVpTfD8uS+yRZuCqP2ufDhw4cPH774uf4CpTpMpHgjvBkAAAAASUVORK5CYII=">分享</a><div class="tags"><a href="/tags/%E4%BB%BF%E7%9C%9F/"><i class="fa fa-tag"></i>仿真</a><a href="/tags/Anylogic/"><i class="fa fa-tag"></i>Anylogic</a></div><div class="post-nav"><a class="pre" href="/2020/04/24/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E7%94%9F%E5%91%BD%E6%B8%B8%E6%88%8F/">【仿真】生命游戏</a><a class="next" href="/2020/04/21/%E3%80%90%E5%AD%A6%E6%9C%AF%E3%80%91%E8%A3%85%E5%A4%87%E7%BB%BC%E5%90%88%E4%BF%9D%E9%9A%9C%E5%85%A5%E9%97%A8/">【学术】装备综合保障入门</a></div><div id="vcomment"></div><script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script><script>var notify = 'false' ? true : false;
+var verify = 'false' ? true : false;
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  appId:'meEC0lb9VEAQeLt5yOttQnBl-gzGzoHsz',
+  appKey:'vuiHwI73GTkGJd6piGCGV48v',
+  placeholder:'说点啥呢？',
+  avatar:'mm',
+  guest_info:guest_info,
+  pageSize:'10'
+})</script></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" target="_blank"><input type="search" name="word" maxlength="20" placeholder="Search"/><input type="hidden" name="si" value="http://whl1207.github.io"/><input name="tn" type="hidden" value="bds"/><input name="cl" type="hidden" value="3"/><input name="ct" type="hidden" value="2097152"/><input name="s" type="hidden" value="on"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/WEB/">WEB</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BB%BF%E7%9C%9F/">仿真</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E6%9C%AF/">学术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A1%AC%E4%BB%B6/">硬件</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%B5%84%E6%BA%90/">资源</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/WEB/" style="font-size: 15px;">WEB</a> <a href="/tags/tensorflow-js/" style="font-size: 15px;">tensorflow.js</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 15px;">人工智能</a> <a href="/tags/%E5%8D%9A%E5%AE%A2/" style="font-size: 15px;">博客</a> <a href="/tags/hexo/" style="font-size: 15px;">hexo</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/node-js/" style="font-size: 15px;">node.js</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E8%AE%A1%E7%AE%97/" style="font-size: 15px;">图形计算</a> <a href="/tags/thinkphp/" style="font-size: 15px;">thinkphp</a> <a href="/tags/%E5%85%A8%E6%A0%88/" style="font-size: 15px;">全栈</a> <a href="/tags/%E4%BB%BF%E7%9C%9F/" style="font-size: 15px;">仿真</a> <a href="/tags/Anylogic/" style="font-size: 15px;">Anylogic</a> <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 15px;">服务器</a> <a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 15px;">教程</a> <a href="/tags/%E7%A6%BB%E6%95%A3%E4%BA%8B%E4%BB%B6/" style="font-size: 15px;">离散事件</a> <a href="/tags/%E5%8A%A0%E5%B7%A5%E8%BD%A6%E9%97%B4/" style="font-size: 15px;">加工车间</a> <a href="/tags/%E7%94%9F%E5%91%BD%E6%B8%B8%E6%88%8F/" style="font-size: 15px;">生命游戏</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 15px;">基础</a> <a href="/tags/windows/" style="font-size: 15px;">windows</a> <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" style="font-size: 15px;">操作系统</a> <a href="/tags/%E9%97%AE%E9%A2%98/" style="font-size: 15px;">问题</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">学习</a> <a href="/tags/markdown/" style="font-size: 15px;">markdown</a> <a href="/tags/%E8%B5%84%E6%BA%90/" style="font-size: 15px;">资源</a> <a href="/tags/%E6%90%9C%E7%B4%A2/" style="font-size: 15px;">搜索</a> <a href="/tags/%E5%AD%A6%E6%9C%AF/" style="font-size: 15px;">学术</a> <a href="/tags/%E8%A3%85%E5%A4%87/" style="font-size: 15px;">装备</a> <a href="/tags/%E4%BF%9D%E9%9A%9C/" style="font-size: 15px;">保障</a> <a href="/tags/%E7%A1%AC%E4%BB%B6/" style="font-size: 15px;">硬件</a> <a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" style="font-size: 15px;">树莓派</a> <a href="/tags/conky/" style="font-size: 15px;">conky</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/05/05/%E3%80%90WEB%E3%80%91%E5%88%A9%E7%94%A8thinkphp%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%89%A9%E6%B5%81%E5%8E%9F%E5%9E%8B%E7%B3%BB%E7%BB%9F/">【WEB】利用thinkphp创建一个物流原型系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/28/%E3%80%90WEB+%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E4%BD%93%E3%80%91%E5%9F%BA%E4%BA%8Etensorflow.js%E7%9A%84%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BC%80%E5%8F%91%E5%85%A5%E9%97%A8/">【WEB+人工智能】基于tensorflow.js的人工智能开发入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E7%94%9F%E5%91%BD%E6%B8%B8%E6%88%8F/">【仿真】生命游戏</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/23/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E5%9F%BA%E4%BA%8EAnylogic%E7%9A%84Java%E4%BB%A3%E7%A0%81%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/">【仿真】基于Anylogic的Java代码入门教程</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/21/%E3%80%90%E5%AD%A6%E6%9C%AF%E3%80%91%E8%A3%85%E5%A4%87%E7%BB%BC%E5%90%88%E4%BF%9D%E9%9A%9C%E5%85%A5%E9%97%A8/">【学术】装备综合保障入门</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/17/%E3%80%90%E4%BB%BF%E7%9C%9F%E3%80%91%E4%BD%BF%E7%94%A8Anylogic%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8F%8A%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">【仿真】使用Anylogic访问服务器及文件系统</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/15/%E3%80%90WEB%E3%80%91%E4%BD%BF%E7%94%A8echarts.js%E6%90%AD%E5%BB%BA%E5%9B%BE%E5%BD%A2%E8%AE%A1%E7%AE%97%E5%BA%94%E7%94%A8/">【WEB】使用echarts.js搭建图形计算应用</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/31/%E3%80%90%E5%AD%A6%E4%B9%A0%E3%80%91%E5%A6%82%E4%BD%95%E6%90%9C%E7%B4%A2%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90/">【学习】如何搜索学习资源</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/30/%E3%80%90WEB%E3%80%91%E5%88%A9%E7%94%A8thinkphp%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%AB%99%E7%82%B9/">【WEB】利用thinkphp创建一个简单的站点</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/30/%E3%80%90%E5%9F%BA%E7%A1%80%E3%80%91%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">【基础】如何安装操作系统</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.baidu.com/" title="百度" target="_blank">百度</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2020 <a href="/." rel="nofollow">？0的网络笔记.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

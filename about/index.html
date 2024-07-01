@@ -1,0 +1,760 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>工作流卡片看板</title>
+    <script src="js/vue.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/marked.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" href="css/zico.min.css">
+  <meta name="generator" content="Hexo 4.2.0"></head>
+  <body style="position:relative">
+    <nav class="navbar navbar-dark bg-dark" style="float:left;width:100%;z-index:999">
+      <form class="form-inline my-2 my-lg-0">
+        <div class="btn-group mx-2">
+          <button type="button" class="btn btn-primary" onclick="addpartiton()">
+            <i class="zi zi_plus"></i>
+          </button>
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="zi zi_stickynote"></i> <span id="partitonname">分区</span>
+          </button>
+          <div class="dropdown-menu" id="partitonarr">
+          </div>
+        </div>
+        <div class="btn-group mx-2">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="zi zi_eye"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" onclick="if(mode!='flow'){flow()}else{mode='flow';init()}">流视图</a>
+            <a class="dropdown-item" href="#" onclick="gantt()">甘特图</a>
+            <a class="dropdown-item" href="#" onclick="todo()">待办图</a>
+            <a class="dropdown-item" href="#" onclick>力导向图</a>
+            <a class="dropdown-item" href="#" onclick>文章视图</a>
+          </div>
+        </div>
+        <button id="add" class="btn btn-success mx-2" type="button" onclick="addcard()"><i class="zi zi_plus"></i></button>
+        <button id="link" class="btn btn-success mx-2" type="button" onclick="startlink()"><i class="zi zi_codebranch"></i></button>
+        <button class="btn btn-info mx-2" type="button" onclick="if(mode=='flow'){init()}else if(mode=='gantt'){gantt()}"><i class="zi zi_syncalt"></i></button>
+        <div class="btn-group mx-2">
+          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="zi zi_database"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" onclick="clearAllLink();location.reload();">清除连线</a>
+            <a class="dropdown-item" href="#" onclick="data.clear();location.reload();">清空数据</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" onclick="exportdata(partiton+date()+'.txt')">导出分区</a>
+            <a class="dropdown-item" onclick="document.getElementById('fileselect').click()">导入分区</a>
+          </div>
+        </div>
+        <div class="btn-group mx-2">
+          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="zi zi_slidersh"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" onclick="fullscreen()"><i class="zi zi_expand"></i> 全屏</a>
+            <a class="dropdown-item" onclick="window.opener = null;window.open('', '_self');window.close();"><i class="zi zi_poweroff"></i> 退出</a>
+          </div>
+        </div>
+        <div class="btn-group mx-2">
+          <button type="button" class="btn" style="color:white" id="pos">
+            (0,0)
+          </button>
+        </div>
+      </form>
+      <div class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" style="opacity:0.3;" placeholder onkeydown="if(event.keyCode==13){search(document.getElementById('searchcontext').value)}" id="searchcontext">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="search(document.getElementById('searchcontext').value)">搜索</button>
+      </div>
+    </nav>
+    <div style="float:left;position:absolute;">
+      <canvas id="canvas" style="cursor:move;" onmousedown="canvasdown()" onmouseup="canvasup()"></canvas>
+    </div>
+    <div id="panel" style="width:100%"></div>
+    <div class="modal" tabindex="-1" role="dialog" id="article" data-backdrop="static">
+      <div class="modal-dialog modal-xl" role="document" id="model">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="title">编辑</h5>
+          </div>
+          <div class="modal-body" style="height:550px">
+            <div style="float:right;width:97%;padding:20px;height:520px;overflow-y:scroll;" id="mark"></div>
+            <textarea id="content" rows="20" style="visibility:hidden;position:absolute;float:left;width:0%;padding:20px;" onchange="save(this.target,'content',this.value)" onkeyup="document.getElementById('mark').innerHTML = marked(this.value);" target=" "></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-info" onclick="$('#content').css({visibility:'visible'});$('#content').animate({width:'48%'});$('#mark').animate({width:'48%'})">编辑</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#content').css({visibility:'hidden'});$('#content').animate({width:'0%'});$('#mark').animate({width:'97%'});">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <input id="fileselect" type="file" onchange="importdata(this)" style="visibility:hidden">
+    <script>
+      //定义面板
+      var panel = document.getElementById("panel");
+      var data=window.localStorage;
+      var partiton="默认分区";
+      var link=false;
+      var linka=null;
+      var linkb=null;
+      var mode="flow";
+      var move=false;
+      var position={
+        ox:0,
+        oy:0,
+        x:0,
+        y:0,
+      };
+      //初始化函数
+      window.onload=function(){
+        //创建默认分区
+        if(data.getItem(partiton)==null){
+          var json={
+            "card":'[]',
+            "link":'[]'
+          };
+          //创建默认分区
+          data.setItem(partiton,JSON.stringify(json));
+        }else{
+          //初始画界面
+          init();
+        }
+      }  
+      //缩放窗口时设置canvas长宽
+      var canvas = $("#canvas");
+      $(window).resize(resizeCanvas);  
+      function resizeCanvas() {  
+        canvas.attr("width", $(window).get(0).innerWidth);  
+        canvas.attr("height", $(window).get(0).innerHeight); 
+        drawAllLink();
+      }; 
+      resizeCanvas();
+      //模态框动作
+      $("#model").draggable({
+        handle: ".modal-header", // 只能点击头部拖动
+        cursor: 'move' //光标呈现为指示链接的指针（一只手）,
+      });
+      //初始化看板
+      function init() {
+        if(mode=="flow"){
+          var json=JSON.parse(data.getItem(partiton));
+          //清除所有card
+          var childs = panel.childNodes;
+          for(var i = childs .length - 1; i >= 0; i--) {
+            panel.removeChild(childs[i]);
+          }
+          //显示分区名
+          document.getElementById('partitonname').innerHTML=partiton;
+          //显示所有分区
+          document.getElementById('partitonarr').innerHTML="";
+          for(i=data.length-1;i>=0;i--){
+            var partitonname=data.key(i);
+            document.getElementById('partitonarr').innerHTML+="<p class='dropdown-item'><a style='float:left;cursor: hand;' onclick='selectpartiton(&quot;"+partitonname+"&quot;)''>"+partitonname+"</a><a style='float:right;cursor:hand;' onclick='delpartiton(&quot;"+partitonname+"&quot;)'><i class='zi zi_times'></i></a></p>";
+          }
+          //读取localStorage画card
+          var cardarr=JSON.parse(json.card);
+          for(i=0;i<=cardarr.length-1;i++){
+            var card=cardarr[i];
+            panel.innerHTML+=div(card);
+          }
+          position={
+            ox:0,
+            oy:0,
+            x:0,
+            y:0,
+          };
+          //绘制所有线
+          drawAllLink();
+        }
+      }
+      //移动动画产生流视图
+      function flow(){
+        mode='flow';
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        var json=JSON.parse(data.getItem(partiton));
+        var cardarr=JSON.parse(json.card);
+        for(var i=0;i<=cardarr.length-1;i++){
+          var temp=cardarr[i];
+          $("#"+temp.id).animate({left:parseInt(temp.x)+position.x+"px",top:parseInt(temp.y)+position.y+"px"});
+          $("#"+temp.id).removeAttr('class');
+          $("#"+temp.id).attr('class', '');
+          $("#"+temp.id).css("width","");
+          $("#"+temp.id).css("height","");
+          $("#"+temp.id).addClass(temp.fold==true?"cardDiv":"cardDivdetailed");
+          $("#"+temp.id).find("textarea").css({height:""});
+        }
+        drawAllLink();
+      }
+      //变为代办视图
+      function todo(){
+            mode='todo';
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            var json=JSON.parse(data.getItem(partiton));
+            var cardarr=JSON.parse(json.card);
+            //编辑成分组
+            var done=[];
+            var todo=[];
+            for(var i=0;i<=cardarr.length-1;i++){
+              var temp=cardarr[i];
+              if(temp['state']=="true"){
+                done.push(temp['id']);
+              }else{
+                todo.push(temp['id']);
+              }
+            }
+            for(var i=0;i<done.length;i++ ){
+              $("#"+done[i]).animate({left:170+Math.floor((250+i*130)/canvas.height)*300+'px',top:120+Math.floor((i*130)%(canvas.height-250))+'px',width:'250px'});
+            }
+            for(var i=0;i<todo.length;i++ ){
+              $("#"+todo[i]).animate({left:780+Math.floor((250+i*130)/canvas.height)*300+'px',top:120+Math.floor((i*130)%(canvas.height-250))+'px',width:'250px'});
+            }
+          }
+
+          //变为gantt视图
+          function gantt(){
+            mode='gantt';
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            var json=JSON.parse(data.getItem(partiton));
+            var cardarr=JSON.parse(json.card);
+            //排序
+            //cardarr.sort(function(a,b){});
+            //计算最大最小时间
+            var min=date();
+            var max=date();
+            for(var i=0;i<=cardarr.length-1;i++){
+              var temp=cardarr[i];
+              if(DateDiff(min,temp.stime)>0){
+                min=temp.stime;
+              }
+              if(DateDiff(max,temp.etime)<0){
+                max=temp.etime;
+              }
+            }
+            //绘制甘特图
+            for(var i=0;i<=cardarr.length-1;i++){
+              var temp=cardarr[i];
+              var top=100*(i+2)/(cardarr.length+3);
+              var width=100*(DateDiff(temp.etime,temp.stime)+1)/(DateDiff(max,min)+3);
+              width=width<5?5:width;
+              var left=100*(1+DateDiff(temp.stime,min)+DateDiff(temp.etime,temp.stime)/2)/(DateDiff(max,min)+3);
+              var height=100/(cardarr.length+4);;
+              $("#"+temp.id).animate({left:left+'%',top:top+'%',width:width+'%',height:height+'%'});
+              $("#"+temp.id).removeClass("cardDivdetailed");
+              $("#"+temp.id).addClass("cardDiv");
+              $("#"+temp.id).find("textarea").css({height:$(window).get(0).innerHeight/(cardarr.length+3)-6});
+            }
+          }
+      //计算最大key
+      function cmax() {
+        var max=0;
+        var json=JSON.parse(data.getItem(partiton));
+        var cardarr=JSON.parse(json.card);
+        if(cardarr.length==0){
+          return 0;
+        }else{
+          for(i=0;i<=cardarr.length-1;i++){
+            var temp = cardarr[i];
+            if(temp["id"]>max){
+              max=temp['id'];
+            }
+          }
+          return max;
+        }
+      }
+      //编辑json储存到localstorage
+      function save(id,key,value){
+        var verification = true;
+        //判断日期一致性
+        if(key=="stime"){
+          if(DateDiff(find(id,'etime'),value)<0){verification = false}
+        }
+        if(key=="etime"){
+          if(DateDiff(value,find(id,'stime'))<0){verification = false}
+        }
+        if(verification==false){
+          alert("日期校验不通过！");
+        }else{
+          var json=JSON.parse(data.getItem(partiton));
+          var cardarr=JSON.parse(json.card);
+          for(i=0;i<=cardarr.length-1;i++){
+            var temp=cardarr[i];
+            if(temp['id']==id){
+              temp[key]=value;
+            }
+            cardarr[i]=temp;
+            json.card=JSON.stringify(cardarr);
+            data.setItem(partiton,JSON.stringify(json));
+          }
+        }
+        //颜色变更
+        if(key=='color'){
+          document.getElementById(id).style.backgroundColor=value;
+        }
+        //gantt图变化
+        if(mode=="gantt"&(key=="etime"|key=="stime")){
+          gantt();
+        }
+        //如果更改状态
+        if(key=='state'){
+          if(mode=="todo"){todo();}
+          document.getElementById(id).style.backgroundColor=value;
+          if(value=='true'){
+            save(id,"etime",date());
+          }
+        }
+      }
+      //查询分区中指定值
+      function find(id,key){
+        var json=JSON.parse(data.getItem(partiton));
+        var cardarr=JSON.parse(json.card);
+        for(i=0;i<=cardarr.length-1;i++){
+          var temp=cardarr[i];
+          if(temp['id']==id){
+            return temp[key];
+          }
+        }
+      }
+      //计算div
+      function div(json) {
+        var div = "<div onmousedown='if(mode==&quot;flow&quot;){dragcardmove()}' onmouseup='if(mode==&quot;flow&quot;){dragcardup()}' touchstart='dragcardtouchstart()' touchmove='dragcardtouchmove()' onclick='linkcard(";
+        var div = div.concat(json.id,")'  title='",json.title,"' class='",json.fold==true?'cardDiv':'cardDivdetailed',"' id='",json.id,"' style='left:",json.x,";top:",json.y,";background-color:",json.color,"'><div class='input-group mb-2'><textarea class='form-control textarea' style='background-color:",json.state=='true'?"rgb(50, 100, 50)":"rgb(255, 255, 255)",";color:",json.state=='true'?"#FFFFFF":"#212529","' onchange='save(",json.id,",&quot;title&quot;,this.value)'>",json.title,"</textarea><div class='button' style='color:",json.state=='true'?"rgb(200, 0, 0);":"rgb(100, 100, 100);","' onclick='edit(",json.id,")'><i class='zi zi_",json.state=='true'?"check":"thlarge","'></i></div></div><div class='simple'><span class='label' style='float:left'>",json.stime,"</span><span class='label' style='float:center'>",json.label,"</span><span class='label' style='float:right'>",json.etime,"</span></div><div class='detail'><div><input style='float:left;width:49%;font-size:8px' type='date' value=",json.stime," onchange='save(",json.id,",&quot;stime&quot;,this.value);init();'></input></div><div><input style='float:right;width:49%;font-size:8px' type='date' value=",json.etime," onchange='save(",json.id,",&quot;etime&quot;,this.value);init();'></input></div><div class='input-group'><div style='width:100%;border:1px solid #000000;margin-top:3px;margin-bottom:4px'><div class='color' style='background-color:#FFFFFF' onclick='save(",json.id,",&quot;color&quot;,&quot;#FFFFFF&quot;)'></div><div class='color' style='background-color:#17a2b8' onclick='save(",json.id,",&quot;color&quot;,&quot;#17a2b8&quot;)'></div><div class='color' style='background-color:#009100' onclick='save(",json.id,",&quot;color&quot;,&quot;#009100&quot;)'></div><div class='color' style='background-color:#0066CC' onclick='save(",json.id,",&quot;color&quot;,&quot;#0066CC&quot;)'></div><div class='color' style='background-color:#E1E100' onclick='save(",json.id,",&quot;color&quot;,&quot;#E1E100&quot;)'></div><div class='color' style='background-color:#a3012f' onclick='save(",json.id,",&quot;color&quot;,&quot;#a3012f&quot;)'></div><div class='color' style='background-color:#c96f06' onclick='save(",json.id,",&quot;color&quot;,&quot;#c96f06&quot;)'></div><div class='color' style='background-color:#ab15f9' onclick='save(",json.id,",&quot;color&quot;,&quot;#ab15f9&quot;)'></div><div class='color' style='background-color:#120468' onclick='save(",json.id,",&quot;color&quot;,&quot;#120468&quot;)'></div><div class='color' style='background-color:#333333' onclick='save(",json.id,",&quot;color&quot;,&quot;#333333&quot;)'></div></div><input type='text' class='form-control' placeholder='' value='",json.label,"' onchange='save(",json.id,",&quot;label&quot;,this.value);init();'><div class='input-group-append'><button class='btn btn-",json.state=='true'?"danger":"success","' onclick='save(",json.id,",&quot;state&quot;,&quot;",json.state=='true'?"false":"true","&quot;);init();'><i class='zi zi_",json.state=='true'?"squareMultiply":"squareHandCorrect","'></i></button></div><div class='input-group-append'><button class='btn btn-info' data-toggle='modal' data-target='#article' onclick='editcontent(",json.id,")'><i class='zi zi_write'></i></button></div><div class='input-group-append'><button class='btn btn-warning' onclick='clearLink(",json.id,")'><i class='zi zi_history'></i></button></div><div class='input-group-append'><button class='btn btn-danger' onclick='delcard(",json.id,")'><i class='zi zi_windowclose'></i></button></div></div></div></div>");
+        return div;
+      }
+      
+          ////搜索卡片
+          function search(context) {
+            var json=JSON.parse(data.getItem(partiton));
+            //读取localStorage画card
+            var cardarr=JSON.parse(json.card);
+            for(i=0;i<=cardarr.length-1;i++){
+              var card=cardarr[i];
+              if(card.title.indexOf(context)>-1|card.label.indexOf(context)>-1||card.content.indexOf(context)>-1){
+                $("#"+card.id).animate({opacity:1});
+              }else{
+                $("#"+card.id).animate({opacity:0.1});
+              }
+            }
+            //绘制所有线
+            drawAllLink();
+          };
+          //计算日期
+          function date() {
+            var date=new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var day = date.getDate();
+            if (month < 10) {
+              month = "0" + month;
+            }
+            if (day < 10) {
+              day = "0" + day;
+            }
+            return year+"-"+month+"-"+day;
+          }
+          //添加卡片
+          function addcard() {
+            if(mode!="flow"){
+              alert("当前模式禁止添加卡片！")
+            }else{
+              var divjson={
+                "id": cmax()+1,
+                "x":"180px",
+                "y":"130px",
+                "title":"默认",
+                "color":"#ffffff",
+                "fold":true,
+                "stime":date(),
+                "etime":date(),
+                "state":false,
+                "label":"",
+                "content":""
+              };
+              panel.innerHTML+=div(divjson);
+              var json=JSON.parse(data.getItem(partiton));
+              jsonarr=JSON.parse(json.card);
+              jsonarr.push(divjson);
+              json.card=JSON.stringify(jsonarr);
+              data.setItem(partiton,JSON.stringify(json));
+              init();
+            }
+          };
+          //查看或编辑卡片
+          function edit(id) {
+            if(document.getElementById(id).className=="cardDiv"){
+              document.getElementById(id).className="cardDivdetailed";
+              save(id,"fold",false);
+            }else{
+              document.getElementById(id).className="cardDiv";
+              save(id,"fold",true);
+            }
+          };
+          //编辑内容
+          function editcontent(id) {
+            document.getElementById('title').innerHTML=find(id,'title');
+            document.getElementById('content').innerHTML=find(id,'content');
+            document.getElementById('content').target=id;
+            document.getElementById('mark').innerHTML = marked(find(id,'content'));
+          };
+          //删除卡片
+          function delcard(id) {
+            var r=confirm("确认要删除"+name+"吗？");
+            if (r==true){
+              panel.removeChild(document.getElementById(id)); 
+              var json=JSON.parse(data.getItem(partiton));
+              var cardarr=JSON.parse(json.card);
+              for(i=0;i<=cardarr.length-1;i++){
+                var temp=cardarr[i];
+                if(temp['id']==id){
+                  cardarr.splice(i,1);
+                }
+              }
+              json.card=JSON.stringify(cardarr);
+              data.setItem(partiton,JSON.stringify(json));
+            }
+            clearLink(id);
+          };
+          //开始添加连线
+          function startlink() {
+            if(link==false){
+              if(mode!="flow"){
+                alert("当前模式禁止连线！")
+              }else{
+                link=true;
+                document.getElementById('link').setAttribute("class",'btn btn-primary mx-2');
+              }
+            }else{
+              link=false;
+              linka=null;
+              linkb=null;
+              document.getElementById('link').setAttribute("class",'btn btn-success mx-2');
+            }
+          };
+          //点击卡片连线
+          function linkcard(id) {
+            if(link==true){
+              if(linka==null){
+                linka=id;
+              }else if(linkb==null){
+                if(linka==id){
+                    alert("禁止连接相同卡片");
+                }else{
+                    linkb=id;
+                    var linkjson={
+                    "a" : linka,
+                    "b" : linkb
+                    };
+                    var json=JSON.parse(data.getItem(partiton));
+                    var linkarr=JSON.parse(json.link);
+                    var ifadd=true;
+                    for(i=0;i<=linkarr.length-1;i++){
+                      var temp=linkarr[i];
+                      if(temp['a']==linkjson.a&temp['b']==linkjson.b){
+                        alert("链接已存在，请勿重复绘制！");
+                        ifadd=false;
+                      }
+                    }
+                    if(ifadd==true){
+                      //储存到link
+                      linkarr.push(linkjson);
+                      json.link=JSON.stringify(linkarr);
+                      data.setItem(partiton,JSON.stringify(json));
+                    }
+                    //重置链接序号
+                    drawLink(linka,linkb);
+                    document.getElementById('link').setAttribute("class",'btn btn-success mx-2');
+                }
+                //重置状态
+                link=false;
+                linka=null;
+                linkb=null;
+              }
+            }
+          }
+          //画带箭头的线
+          function drawLink(a,b) {
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            var fromX=parseInt(find(a,'x'));
+            var fromY=parseInt(find(a,'y'));
+            var toX=parseInt(find(b,'x'));
+            var toY=parseInt(find(b,'y'));
+            theta = 30;
+            headlen = 15;
+            width = 4;
+            color = '#fff';
+            // 计算各角度和对应的P2,P3坐标
+            var angle = Math.atan2(fromY - toY, fromX - toX) * 180 / Math.PI,
+            angle1 = (angle + theta) * Math.PI / 180,
+            angle2 = (angle - theta) * Math.PI / 180,
+            topX = headlen * Math.cos(angle1),
+            topY = headlen * Math.sin(angle1),
+            botX = headlen * Math.cos(angle2),
+            botY = headlen * Math.sin(angle2);
+            ctx.save();
+            //画线
+            ctx.beginPath();
+            var arrowX = fromX - topX,
+                arrowY = fromY - topY;
+            ctx.moveTo(arrowX+position.x, arrowY+position.y);
+            ctx.moveTo(fromX+position.x, fromY+position.y);
+            ctx.lineTo(toX+position.x, toY+position.y);
+            //画箭头
+            var middleX=(fromX+toX)/2+position.x;
+            var middleY=(fromY+toY)/2+position.y;
+            ctx.moveTo(middleX, middleY);
+            arrowX = middleX + topX;
+            arrowY = middleY + topY;
+            ctx.moveTo(arrowX, arrowY);
+            ctx.lineTo(middleX, middleY);
+            arrowX = middleX + botX;
+            arrowY = middleY + botY;
+            ctx.lineTo(arrowX, arrowY);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.stroke();
+            ctx.restore();
+          }
+          //重绘所有线
+          function drawAllLink() {
+            if(mode=="flow"){
+              var canvas = document.getElementById("canvas");
+              var ctx = canvas.getContext("2d");
+              ctx.clearRect(0,0,canvas.width,canvas.height);
+              var json=JSON.parse(data.getItem(partiton));
+              var linkarr=JSON.parse(json.link);
+              for(var i=0;i<=linkarr.length-1;i=i+1){
+                var link=linkarr[i];
+                drawLink(link.a,link.b);
+              }
+            }
+          }
+          //清除连接到该卡片的所有线
+          function clearLink(id) {
+            var json=JSON.parse(data.getItem(partiton));
+            var linkarr=JSON.parse(json.link);
+            for(i=linkarr.length-1;i>=0;i--){
+              if(linkarr[i].a==id||linkarr[i].b==id){
+                linkarr.splice(i,1);
+                break;
+              }
+            }
+            json.link=JSON.stringify(linkarr);
+            data.setItem(partiton,JSON.stringify(json));
+            drawAllLink();
+          }
+          //清除所有线
+          function clearAllLink() {
+            var json=JSON.parse(data.getItem(partiton));
+            json.link='[]';
+            data.setItem(partiton,JSON.stringify(json));
+          }
+          //导出数据
+          function exportdata(filename) {
+            var json=JSON.parse(data.getItem(partiton));
+            var pom = document.createElement("a");
+            pom.setAttribute(
+              "href",
+              "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(json))
+            );
+            pom.setAttribute("download", filename);
+            if (document.createEvent) {
+              var event = document.createEvent("MouseEvents");
+              event.initEvent("click", true, true);
+              pom.dispatchEvent(event);
+            } else {
+              pom.click();
+            }
+          }
+          //导入数据
+          function importdata(input) {
+            if (window.FileReader) {
+                var file = input.files[0];
+                console.log(file)
+                filename = file.name.split(".")[0];
+                var reader = new FileReader();
+                reader.onload = function() {
+                  data.setItem(partiton,this.result);
+                  location.reload();
+                }
+                reader.readAsText(file,"utf-8");
+            }
+          }
+          //添加分区
+          function addpartiton() {
+            var str=window.prompt("请输入分区名称","工作");
+            if(str){
+              partiton=str;
+              if(data.getItem(partiton)==null){
+                var json={
+                  "card":'[]',
+                  "link":'[]'
+                };
+                //将新分区写入localstorage
+                data.setItem(partiton,JSON.stringify(json));
+                init();
+              }else{
+                alert("分区已存在，请勿重复创建。");
+              }
+            }
+          }
+          //选择分区
+          function selectpartiton(name) {
+            partiton=name;
+            mode="flow";
+            init();
+          }
+          //删除分区
+          function delpartiton(name) {
+            if(name=="默认分区"){
+              alert('默认分区无法删除');
+            }else{
+              var r=confirm("确认要删除"+name+"吗？");
+              if (r==true){
+                data.removeItem(name);
+                partiton="默认分区";
+                mode="flow";
+                init();
+              }
+            }
+          }
+          //计算日期差值
+          function DateDiff(sDate1,sDate2){ //sDate1和sDate2是xxxx-xx-xx格式
+              var  aDate,  oDate1,  oDate2,  iDays;
+              aDate  =  sDate1.split("-");
+              oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0]);    //转换为xx-xx-xxxx格式
+              aDate  =  sDate2.split("-");
+              oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0]);
+              iDays  =  parseInt((oDate1-oDate2)/1000/60/60/24);    //把相差的毫秒数转换为天数
+              return  iDays;
+          }
+          //画布移动
+          function canvasdown(){
+            event.stopPropagation();
+            if(mode=="flow"){
+              move=true;
+            }
+            var ev = event || window.event;
+            position.ox=ev.clientX;
+            position.oy=ev.clientY;
+          }
+          function canvasup(){
+            event.stopPropagation();
+            if(move==true){
+              var ev = event || window.event;
+              var oposition={x:position.x,y:position.y};
+              var disX = ev.clientX - position.ox;
+              var disY = ev.clientY - position.oy;
+              position.x = oposition.x + disX;
+              position.y = oposition.y + disY;
+              $("#pos").html("("+position.x+","+position.y+")");
+              flow();
+              move=false;
+            }
+          }
+          //可移动div
+        function dragcardmove(){
+          event.stopPropagation();
+          var ev = event || window.event;
+          var Drag=event.currentTarget;
+          var disX = ev.clientX - Drag.offsetLeft;
+          var disY = ev.clientY - Drag.offsetTop;
+          document.onmousemove = function(event) {
+            var ev = event || window.event;
+            Drag.style.left = ev.clientX - disX + "px";
+            Drag.style.top = ev.clientY - disY + "px";
+            Drag.style.cursor = "move";
+          };
+        }
+        //移动端代码
+        var start   = {x:0,y:0}; //滑动的起始坐标
+        var end     = {x:0,y:0}; //滑动停止坐标
+        var offset  = {x:0,y:0}; //偏移
+        function dragcardtouchstart(){
+          alert();
+          var ev = event || window.event;
+          start.x = ev.touches[0].clientX;
+          start.y = ev.touches[0].clientY;
+        }
+        function dragcardtouchmove(){
+          var Drag=event.currentTarget;
+          
+          end.x = event.touches[0].clientX;
+          end.y = event.touches[0].clientY;
+        // console.log(end);
+
+        offset.x = end.x - start.x;
+        offset.y = end.y - start.y;
+
+        start.x = end.x;
+        start.y = end.y;
+
+        marginLeft = isNaN( parseInt(content.style.marginLeft) ) ? 0 : parseInt(content.style.marginLeft);
+        marginLeft = marginLeft + offset.x;
+        if(marginLeft > 0 || marginLeft <= -contentWidthEdge){
+
+        }else{
+            content.style.marginLeft = marginLeft + "px";
+        }
+
+        marginTop = isNaN( parseInt(content.style.marginTop) ) ? 0 : parseInt(content.style.marginTop);
+        marginTop = marginTop + offset.y;
+        if(marginTop > 0 || marginTop <= -contentHeightEdge){
+
+        }else{
+            content.style.marginTop = marginTop + "px";
+        }
+        console.log("offset.x: "+offset.x+", marginLeft: "+marginLeft + " marginTop: "+marginTop);
+
+        }
+        function dragcardup(){
+          var ev = event || window.event;
+          var Drag=event.currentTarget;
+          var id=Drag.getAttribute("id");
+          document.onmousemove = null;
+          Drag.style.cursor = "default";
+          var disX = ev.clientX - Drag.offsetLeft;
+          var disY = ev.clientY - Drag.offsetTop;
+          //储存新结构
+          save(id,'x',ev.clientX - disX - position.x + "px");
+          save(id,'y',ev.clientY - disY - position.y + "px");
+          drawAllLink();
+        }
+        function fullscreen(){
+        if (document.fullscreenElement ||
+                document.mozFullScreenElement ||
+                document.webkitFullscreenElement ||
+                document.msFullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        } else {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.body.msRequestFullscreen) {
+                document.documentElement.body.msRequestFullscreen();
+            }
+        }
+    }
+    </script>
+  </body>
+</html>
